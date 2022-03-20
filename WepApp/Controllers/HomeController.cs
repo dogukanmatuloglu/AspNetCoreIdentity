@@ -53,5 +53,10 @@ namespace WepApp.Controllers
             }
             return View(userViewModel);
         }
+
+        public async Task<IActionResult> LogIn()
+        {
+            return View();
+        }
     }
 }
