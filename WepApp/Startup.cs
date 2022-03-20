@@ -12,6 +12,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using WepApp.Models;
 
+using WepApp.CustomPasswordValidation;
+
 namespace WepApp
 {
     public class Startup
@@ -35,7 +37,7 @@ namespace WepApp
             
             
             
-            }).AddEntityFrameworkStores<AppIdentityDbContext>();
+            }).AddPasswordValidator<CustomPasswordValidator>().AddEntityFrameworkStores<AppIdentityDbContext>();
 
         }
 
