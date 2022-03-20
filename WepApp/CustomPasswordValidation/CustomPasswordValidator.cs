@@ -29,7 +29,7 @@ namespace WepApp.CustomPasswordValidation
 
             if (errors.Count==0)
             {
-                return IdentityResult.Success;//Task.FromResult(IdentityResult.Success);
+                return  IdentityResult.Success;//Task.FromResult(IdentityResult.Success);
             }
             else
             {
