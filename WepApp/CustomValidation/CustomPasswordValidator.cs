@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WepApp.Models;
 
-namespace WepApp.CustomPasswordValidation
+namespace WepApp.CustomValidation
 {
     public class CustomPasswordValidator : IPasswordValidator<AppUser>
     {

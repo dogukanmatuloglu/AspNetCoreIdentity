@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WepApp.Models;
 
-using WepApp.CustomPasswordValidation;
+using WepApp.CustomValidation;
 
 namespace WepApp
 {
@@ -40,7 +40,7 @@ namespace WepApp
 
 
 
-            }).AddPasswordValidator<CustomPasswordValidator>().AddEntityFrameworkStores<AppIdentityDbContext>();
+            }).AddPasswordValidator<CustomPasswordValidator>().AddUserValidator<CustomUserValidator>().AddEntityFrameworkStores<AppIdentityDbContext>();
 
         }
 
