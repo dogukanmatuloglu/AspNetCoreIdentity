@@ -12,10 +12,12 @@ namespace WepApp.Controllers
     public class HomeController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public HomeController(UserManager<AppUser> userManager)
+        public HomeController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager )
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         public IActionResult Index()
@@ -56,6 +58,30 @@ namespace WepApp.Controllers
 
         public async Task<IActionResult> LogIn()
         {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> LogIn(LoginViewModel loginViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                AppUser appUser = await _userManager.FindByEmailAsync(loginViewModel.Email);
+                if (appUser!=null)
+                {
+                    await _signInManager.SignOutAsync();
+                 Microsoft.AspNetCore.Identity.SignInResult result=await _signInManager.PasswordSignInAsync(appUser,loginViewModel.PassWord,false,false);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Member");
+                    }
+
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Geçersiz Kullanıcı adı veya şifresi");
+            }
             return View();
         }
     }

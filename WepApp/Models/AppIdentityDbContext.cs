@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WepApp.Models
 {
-    public class AppIdentityDbContext:IdentityDbContext<AppUser>
+    public class AppIdentityDbContext:IdentityDbContext<AppUser,AppRole,string>
     {
         public AppIdentityDbContext(DbContextOptions options):base(options)
         {

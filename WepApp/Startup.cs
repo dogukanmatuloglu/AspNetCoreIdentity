@@ -31,7 +31,7 @@ namespace WepApp
             CookieBuilder cookieBuilder = new CookieBuilder();
             cookieBuilder.Name = "MyBlog";
             cookieBuilder.HttpOnly = true;
-            cookieBuilder.Expiration = System.TimeSpan.FromDays(60);
+            //cookieBuilder.Expiration = TimeSpan.FromDays(60); https://brokul.dev/authentication-cookie-lifetime-and-sliding-expiration
             cookieBuilder.SameSite = SameSiteMode.Lax;
             cookieBuilder.SecurePolicy = CookieSecurePolicy.SameAsRequest;
             services.ConfigureApplicationCookie(opt =>
@@ -40,6 +40,7 @@ namespace WepApp
                 opt.LoginPath = new PathString("/Home/LogIn");
                 opt.Cookie = cookieBuilder;
                 opt.SlidingExpiration = true;
+                opt.ExpireTimeSpan = TimeSpan.FromDays(60);
 
             });
             services.AddIdentity<AppUser, AppRole>(opt=> {
