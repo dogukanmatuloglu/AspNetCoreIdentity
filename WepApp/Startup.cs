@@ -28,6 +28,20 @@ namespace WepApp
         {
             services.AddControllersWithViews();
             services.AddDbContext<AppIdentityDbContext>(opt => opt.UseSqlServer(Configuration["ConnectionStrings:DefaultConnectionString"]));
+            CookieBuilder cookieBuilder = new CookieBuilder();
+            cookieBuilder.Name = "MyBlog";
+            cookieBuilder.HttpOnly = true;
+            cookieBuilder.Expiration = System.TimeSpan.FromDays(60);
+            cookieBuilder.SameSite = SameSiteMode.Lax;
+            cookieBuilder.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+            services.ConfigureApplicationCookie(opt =>
+            {
+
+                opt.LoginPath = new PathString("/Home/LogIn");
+                opt.Cookie = cookieBuilder;
+                opt.SlidingExpiration = true;
+
+            });
             services.AddIdentity<AppUser, AppRole>(opt=> {
                 opt.Password.RequiredLength = 4;
                 opt.Password.RequireNonAlphanumeric = false;
