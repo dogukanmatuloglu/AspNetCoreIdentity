@@ -28,6 +28,20 @@ namespace WepApp
         {
             services.AddControllersWithViews();
             services.AddDbContext<AppIdentityDbContext>(opt => opt.UseSqlServer(Configuration["ConnectionStrings:DefaultConnectionString"]));
+           
+            services.AddIdentity<AppUser, AppRole>(opt=> {
+                opt.Password.RequiredLength = 4;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireDigit = false;
+
+                opt.User.RequireUniqueEmail = true;
+                opt.User.AllowedUserNameCharacters = "abcçdefghýijklmnoöpqrsþtuüvwxyzABCÇDEFGHIÝJKLMNOÖPQRSÞTUÜVWXYZ0123456789-._";
+
+
+
+            }).AddPasswordValidator<CustomPasswordValidator>().AddUserValidator<CustomUserValidator>().AddErrorDescriber<CustomIdentityDescriber>().AddEntityFrameworkStores<AppIdentityDbContext>();
             CookieBuilder cookieBuilder = new CookieBuilder();
             cookieBuilder.Name = "MyBlog";
             cookieBuilder.HttpOnly = true;
@@ -43,20 +57,6 @@ namespace WepApp
                 opt.ExpireTimeSpan = TimeSpan.FromDays(60);
 
             });
-            services.AddIdentity<AppUser, AppRole>(opt=> {
-                opt.Password.RequiredLength = 4;
-                opt.Password.RequireNonAlphanumeric = false;
-                opt.Password.RequireLowercase = false;
-                opt.Password.RequireUppercase = false;
-                opt.Password.RequireDigit = false;
-
-                opt.User.RequireUniqueEmail = true;
-                opt.User.AllowedUserNameCharacters = "abcçdefghýijklmnoöpqrsþtuüvwxyzABCÇDEFGHIÝJKLMNOÖPQRSÞTUÜVWXYZ0123456789-._";
-
-
-
-            }).AddPasswordValidator<CustomPasswordValidator>().AddUserValidator<CustomUserValidator>().AddErrorDescriber<CustomIdentityDescriber>().AddEntityFrameworkStores<AppIdentityDbContext>();
-
         }
 
     
@@ -68,12 +68,19 @@ namespace WepApp
             }
             app.UseStaticFiles();
             app.UseRouting();
+           
+
+            app.UseAuthentication();//Doðrulamadan sonra yetkilendirme istek ardýþýk düzeninde olmalý 
+            app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
+               
             });
-            app.UseAuthentication();
+          
+
         }
     }
 }

@@ -17,5 +17,6 @@ namespace WepApp.ViewModels
          [DataType(DataType.Password)]
          [MinLength(4,ErrorMessage ="Şifreniz en az 4 karakterli olmalıdır")]
         public string  PassWord { get; set; }
+        public bool RememberMe { get; set; }
     }
 }

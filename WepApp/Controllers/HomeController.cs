@@ -56,8 +56,9 @@ namespace WepApp.Controllers
             return View(userViewModel);
         }
 
-        public async Task<IActionResult> LogIn()
+        public  IActionResult LogIn(string returnUrl)
         {
+            TempData["ReturnUrl"] = returnUrl;
             return View();
         }
         [HttpPost]
@@ -69,10 +70,15 @@ namespace WepApp.Controllers
                 if (appUser!=null)
                 {
                     await _signInManager.SignOutAsync();
-                 Microsoft.AspNetCore.Identity.SignInResult result=await _signInManager.PasswordSignInAsync(appUser,loginViewModel.PassWord,false,false);
+                 Microsoft.AspNetCore.Identity.SignInResult result=await _signInManager.PasswordSignInAsync(appUser,loginViewModel.PassWord,loginViewModel.RememberMe,false);
 
                     if (result.Succeeded)
                     {
+                        if (TempData["ReturnUrl"]!=null)
+                        {
+                            var d = Redirect(TempData["ReturnUrl"].ToString());
+                            return d;
+                        }
                         return RedirectToAction("Index", "Member");
                     }
 
@@ -82,7 +88,7 @@ namespace WepApp.Controllers
             {
                 ModelState.AddModelError("", "Geçersiz Kullanıcı adı veya şifresi");
             }
-            return View();
+            return View(loginViewModel);
         }
     }
 }
