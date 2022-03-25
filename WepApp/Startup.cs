@@ -70,7 +70,7 @@ namespace WepApp
             app.UseRouting();
            
 
-            app.UseAuthentication();//Doðrulamadan sonra yetkilendirme istek ardýþýk düzeninde olmalý 
+            app.UseAuthentication();//istek ardýþýk düzeninde  Doðrulamadan sonra yetkilendirme olmalý 
             app.UseAuthorization();
 
 

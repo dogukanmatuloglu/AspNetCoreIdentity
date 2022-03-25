@@ -69,11 +69,19 @@ namespace WepApp.Controllers
                 AppUser appUser = await _userManager.FindByEmailAsync(loginViewModel.Email);
                 if (appUser!=null)
                 {
+
+                    if (await _userManager.IsLockedOutAsync(appUser))
+                    {
+                        ModelState.AddModelError("", "Hesabınız bir süreliğine kilitlenmiştir. Daha sonra tekrar deneyiniz");
+                    }
                     await _signInManager.SignOutAsync();
                  Microsoft.AspNetCore.Identity.SignInResult result=await _signInManager.PasswordSignInAsync(appUser,loginViewModel.PassWord,loginViewModel.RememberMe,false);
 
                     if (result.Succeeded)
                     {
+
+                        await _userManager.ResetAccessFailedCountAsync(appUser);
+
                         if (TempData["ReturnUrl"]!=null)
                         {
                             var d = Redirect(TempData["ReturnUrl"].ToString());
@@ -81,12 +89,28 @@ namespace WepApp.Controllers
                         }
                         return RedirectToAction("Index", "Member");
                     }
+                    else
+                    {
+                        await _userManager.AccessFailedAsync(appUser);
+                        int fail = await _userManager.GetAccessFailedCountAsync(appUser);
+
+                        if (fail>=3)
+                        {
+                            await _userManager.SetLockoutEndDateAsync(appUser, new System.DateTimeOffset(DateTime.Now.AddMinutes(20)));
+
+                            ModelState.AddModelError("", "Hesabınız 3 başarısız girişten dolayı 20 dakika süreyle kitlenmiştir.");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Geçersiz Kullanıcı adı veya şifresi"); 
+                        }
+                    }
 
                 }
             }
             else
             {
-                ModelState.AddModelError("", "Geçersiz Kullanıcı adı veya şifresi");
+                ModelState.AddModelError("", "Bu email adresine kayıtlı kullanıcı bulanamamaıştır.");
             }
             return View(loginViewModel);
         }
