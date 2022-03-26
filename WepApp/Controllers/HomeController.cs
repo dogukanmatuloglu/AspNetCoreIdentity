@@ -114,5 +114,22 @@ namespace WepApp.Controllers
             }
             return View(loginViewModel);
         }
+        public IActionResult ResetPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ResetPassword(PasswordResetViewModel passwordResetViewModel)
+        {
+
+            var user = _userManager.FindByEmailAsync(passwordResetViewModel.Email).Result;
+
+            if (user!=null)
+            {
+                string passwordResetToken = _userManager.GeneratePasswordResetTokenAsync(user).Result;
+            }
+            return View();
+        }
+
     }
 }
