@@ -41,7 +41,7 @@ namespace WepApp
 
 
 
-            }).AddPasswordValidator<CustomPasswordValidator>().AddUserValidator<CustomUserValidator>().AddErrorDescriber<CustomIdentityDescriber>().AddEntityFrameworkStores<AppIdentityDbContext>();
+            }).AddPasswordValidator<CustomPasswordValidator>().AddUserValidator<CustomUserValidator>().AddErrorDescriber<CustomIdentityDescriber>().AddEntityFrameworkStores<AppIdentityDbContext>().AddDefaultTokenProviders();
             CookieBuilder cookieBuilder = new CookieBuilder();
             cookieBuilder.Name = "MyBlog";
             cookieBuilder.HttpOnly = true;

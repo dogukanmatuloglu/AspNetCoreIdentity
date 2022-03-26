@@ -127,6 +127,13 @@ namespace WepApp.Controllers
             if (user!=null)
             {
                 string passwordResetToken = _userManager.GeneratePasswordResetTokenAsync(user).Result;
+                string passwordResetLink = Url.Action("ResetPasswordConfirm", "Home", new
+                {
+                    userId = user.Id,
+                    token = passwordResetToken,
+
+                },HttpContext.Request.Scheme) ;
+                Helper.PasswordReset.PasswordResetSendEmail(passwordResetLink, passwordResetViewModel.Email, "");
             }
             return View();
         }
