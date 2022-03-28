@@ -138,5 +138,14 @@ namespace WepApp.Controllers
             return View();
         }
 
+
+        public IActionResult ResetPasswordConfirm(string userId,string token)
+        {
+
+            TempData["userId"] = userId;
+            TempData["token"] = token;
+            return View();
+        }
+
     }
 }
