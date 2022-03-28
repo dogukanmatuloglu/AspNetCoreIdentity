@@ -134,8 +134,13 @@ namespace WepApp.Controllers
 
                 },HttpContext.Request.Scheme) ;
                 Helper.PasswordReset.PasswordResetSendEmail(passwordResetLink, passwordResetViewModel.Email, "");
+                ViewBag.status = "succes";
             }
-            return View();
+            else
+            {
+                ModelState.AddModelError("", "sistemde kayıtlı e posta adresi bulunamamıştır.");
+            }
+            return View(passwordResetViewModel);
         }
 
 
@@ -145,6 +150,37 @@ namespace WepApp.Controllers
             TempData["userId"] = userId;
             TempData["token"] = token;
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPasswordConfirm([Bind("NewPassWord")]PasswordResetViewModel passwordResetViewModel)
+        {
+            string token = TempData["token"].ToString();
+            string userId = TempData["userId"].ToString();
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user!=null)
+            {
+                IdentityResult result = await _userManager.ResetPasswordAsync(user, token, passwordResetViewModel.NewPassWord);
+
+                if (result.Succeeded)
+                {
+                    await _userManager.UpdateSecurityStampAsync(user);
+                  
+                    ViewBag.status = "succes";
+                }
+                else
+                {
+                    foreach (var item in result.Errors)
+                    {
+                        ModelState.AddModelError("", item.Description);
+                    }
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Hata meydana gelmiştir");
+            }
+
+            return View(passwordResetViewModel);
         }
 
     }
