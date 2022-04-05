@@ -52,6 +52,7 @@ namespace WepApp
             {
 
                 opt.LoginPath = new PathString("/Home/LogIn");
+                opt.LogoutPath = new PathString("/Member/LogOut");
                 opt.Cookie = cookieBuilder;
                 opt.SlidingExpiration = true;
                 opt.ExpireTimeSpan = TimeSpan.FromDays(60);

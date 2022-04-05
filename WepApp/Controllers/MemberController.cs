@@ -117,5 +117,12 @@ namespace WepApp.Controllers
 
             return View();
         }
+
+        public void LogOut()
+        {
+            _signInManager.SignOutAsync();
+
+            
+        }
     }
 }
