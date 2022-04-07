@@ -1,11 +1,15 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using WepApp.Enums;
 using WepApp.Models;
 using WepApp.ViewModels;
 
@@ -36,22 +40,46 @@ namespace WepApp.Controllers
         {
             AppUser user = _userManager.FindByNameAsync(User.Identity.Name).Result;
             UserViewModel userViewModel = user.Adapt<UserViewModel>();
-
+            ViewBag.Gender = new SelectList(Enum.GetNames(typeof(Gender)));
 
             return View(userViewModel);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> UserEdit(UserViewModel userViewModel)
+        public async Task<IActionResult> UserEdit(UserViewModel userViewModel,IFormFile userPicture)
         {
             ModelState.Remove("Password");
+            ViewBag.Gender = new SelectList(Enum.GetNames(typeof(Gender)));
             if (ModelState.IsValid)
             {
                 AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+
+
+
+
+                if (userPicture!=null && userPicture.Length>0)
+                {
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(userPicture.FileName);
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/UserPicture",fileName);
+
+                    using(var stream=new FileStream(path, FileMode.Create)){
+
+
+                        await userPicture.CopyToAsync(stream);
+                        user.Picture = "/UserPicture/" + fileName;
+                    }
+
+
+
+                }
                 user.UserName = userViewModel.UserName;
                 user.PhoneNumber = userViewModel.PhoneNumber;
                 user.Email = userViewModel.Email;
+              
+                user.City = userViewModel.City;
+                user.BirthDay = userViewModel.BirthDay;
+                user.Gender = (int)userViewModel.Gender;
                IdentityResult result=  await _userManager.UpdateAsync(user);
 
                 if (result.Succeeded)
