@@ -152,5 +152,9 @@ namespace WepApp.Controllers
 
             
         }
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }

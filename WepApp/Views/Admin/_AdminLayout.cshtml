@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html>
 <head>
@@ -11,7 +10,7 @@
     <script src="~/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
         <div class="container">
             <a class="navbar-brand" href="#">Identity.com</a>
@@ -21,10 +20,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" asp-action="Index">Üye Anasayfa</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn btn-info" aria-current="page" asp-action="Index" asp-controller="Admin">Admin Ana Sayfa</a>
+                        <a class="nav-link active" aria-current="page" asp-action="Index" asp-controller="Admin">Admin  Anasayfa</a>
                     </li>
 
 
@@ -41,9 +37,9 @@
             </div>
             <div class="col-md-4">
                 <h3>Menü</h3>
-                <a class="btn btn-info btn-toolbar" asp-action="PasswordChange" asp-controller="Member">Şifre Değiştirme</a>
-                <a class="btn btn-info btn-toolbar" asp-action="UserEdit" asp-controller="Member">Bilgi Güncelleme </a>
-                <a class="btn btn-info btn-toolbar" asp-action="LogOut" asp-controller="Member" asp-route-returnUrl="/Home/Index">Çıkış Yap</a>
+                <a class="btn btn-danger btn-toolbar" asp-action="Users" asp-controller="Admin">Üyeler</a>
+                <a class="btn btn-danger btn-toolbar" asp-action="Roller" asp-controller="Admin">Roller </a>
+                <a class="btn btn-danger btn-toolbar" asp-action="LogOut" asp-controller="Member" asp-route-returnUrl="/Home/Index">Çıkış Yap</a>
 
 
 
