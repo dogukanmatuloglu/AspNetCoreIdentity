@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace WepApp.Controllers
 {
     public class AdminController : Controller
     {
+   
+
         private UserManager<AppUser> _userManager;
         private RoleManager<AppRole> _roleManager;
         public AdminController(UserManager<AppUser> userManager,RoleManager<AppRole> roleManager)
@@ -57,6 +60,16 @@ namespace WepApp.Controllers
         public IActionResult Roles()
         {
             return View(_roleManager.Roles.ToList());
+        }
+
+        public IActionResult RoleDelete(string id)
+        {
+            AppRole role = _roleManager.FindByIdAsync(id).Result;
+            if (role!=null)
+            {
+                IdentityResult result = _roleManager.DeleteAsync(role).Result;
+            }
+            return RedirectToAction("Roles");
         }
     }
 }
