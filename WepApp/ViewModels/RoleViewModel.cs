@@ -11,7 +11,7 @@ namespace WepApp.ViewModels
         [Display(Name="Role İsmi")]
         [Required(ErrorMessage ="Role ismi gereklidir.")]
         public string Name { get; set; }
-        public int Id { get; set; }
+        public string Id { get; set; }
 
     }
 }

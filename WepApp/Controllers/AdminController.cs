@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WepApp.Models;
 using WepApp.ViewModels;
+using Mapster;
 
 namespace WepApp.Controllers
 {
@@ -70,6 +71,43 @@ namespace WepApp.Controllers
                 IdentityResult result = _roleManager.DeleteAsync(role).Result;
             }
             return RedirectToAction("Roles");
+        }
+
+        public  IActionResult RoleUpdate(string id)
+        {
+            AppRole role = _roleManager.FindByIdAsync(id).Result;
+            if (role!=null)
+            {
+                return View(role.Adapt<RoleViewModel>());
+            }
+            return RedirectToAction("Roles");
+        }
+        [HttpPost]
+        public IActionResult RoleUpdate(RoleViewModel roleViewModel)
+        {
+            AppRole role = _roleManager.FindByIdAsync(roleViewModel.Id).Result;
+            if (role != null)
+            {
+                role.Name = roleViewModel.Name;
+                IdentityResult result = _roleManager.UpdateAsync(role).Result;
+
+                if (result.Succeeded)
+                {
+                  return  RedirectToAction("Roles");
+                }
+                else
+                {
+                    foreach (var item in result.Errors)
+                    {
+                        ModelState.AddModelError("", item.Description);
+                    }
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Güncelleme İşlemi Başarısız OLdu");
+            }
+            return View(roleViewModel);
         }
     }
 }

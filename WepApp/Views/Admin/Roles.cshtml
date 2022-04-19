@@ -12,6 +12,7 @@
         <th>Id</th>
         <th>Rol İsmi</th>
         <th>Silme</th>
+        <th>Güncelleme</th>
     </tr>
 
     @foreach (var item in Model)
@@ -26,6 +27,7 @@
 
             </form>
         </td>
+        <td><a class="btn btn-info" asp-action="RoleUpdate" asp-route-id="@item.Id"> Güncelle</a></td>
     </tr>
       
     }
