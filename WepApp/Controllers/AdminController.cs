@@ -109,5 +109,32 @@ namespace WepApp.Controllers
             }
             return View(roleViewModel);
         }
+
+
+        public IActionResult RoleAssign(string id)
+        {
+            AppUser user = _userManager.FindByIdAsync(id).Result;
+            ViewBag.userName = user.UserName;
+            var roles = _roleManager.Roles;
+            List<string> userroles = _userManager.GetRolesAsync(user).Result as List<string>;
+            List<RoleAssignViewModel> roleAssignViewModels = new List<RoleAssignViewModel>();
+            foreach (var item in roles)
+            {
+                RoleAssignViewModel r = new RoleAssignViewModel();
+                r.RoleId = item.Id;
+                r.RoleName = item.Name;
+                if (userroles.Contains(item.Name))
+                {
+                    r.Exist = true;
+                }
+                else
+                {
+                    r.Exist = false;
+                }
+                roleAssignViewModels.Add(r);
+            }
+            return View(roleAssignViewModels);
+
+        }
     }
 }
