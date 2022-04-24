@@ -113,6 +113,7 @@ namespace WepApp.Controllers
 
         public IActionResult RoleAssign(string id)
         {
+            TempData["userId"] = id;
             AppUser user = _userManager.FindByIdAsync(id).Result;
             ViewBag.userName = user.UserName;
             var roles = _roleManager.Roles;
@@ -135,6 +136,25 @@ namespace WepApp.Controllers
             }
             return View(roleAssignViewModels);
 
+        }
+        [HttpPost]
+        public async Task<IActionResult> RoleAssign(List<RoleAssignViewModel> roleAssignViewModels)
+        {
+
+            AppUser user = _userManager.FindByIdAsync(TempData["userId"].ToString()).Result;
+            foreach (var item in roleAssignViewModels)
+            {
+                if (item.Exist==true)
+                {
+                  await  _userManager.AddToRoleAsync(user, item.RoleName);
+                }
+                else
+                {
+                   await _userManager.RemoveFromRoleAsync(user, item.RoleName);
+                }
+
+            }
+            return RedirectToAction("Users");
         }
     }
 }
